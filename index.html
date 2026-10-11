@@ -885,7 +885,7 @@
       document.getElementById('plan-form').addEventListener('submit', function(e) {
         e.preventDefault();
         if (state.placeCode === 'F' && !inputCustomPlace.value.trim()) {
-          planErrorMsg.textContent = 'Silakan tuliskan nama tempat untuk pilihan F.';
+          planErrorMsg.textContent = 'Silakan kasih clue untuk pilihan F.';
           planErrorMsg.classList.remove('hidden');
           return;
         }
