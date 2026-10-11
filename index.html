@@ -1,11 +1,987 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
-</head>
-<body>
-    <h1>Hello, World!</h1>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ajakan Bertemu</title>
+    <meta name="description" content="Aplikasi interaktif ajakan bertemu minimalis dengan pemilihan tempat dan jadwal." />
+    <meta property="og:title" content="Ajakan Bertemu" />
+    <meta property="og:description" content="Aplikasi interaktif ajakan bertemu minimalis dengan pemilihan tempat dan jadwal." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Tailwind CSS CDN for 100% standalone single-file usage -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+              display: ['"Outfit"', 'system-ui', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+
+    <style>
+      body {
+        font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      }
+      .font-display {
+        font-family: 'Outfit', system-ui, sans-serif;
+      }
+      @keyframes pulse-subtle {
+        0%, 100% { opacity: 0.35; transform: scale(1); }
+        50% { opacity: 0.55; transform: scale(1.05); }
+      }
+      .animate-pulse-subtle {
+        animation: pulse-subtle 4s ease-in-out infinite;
+      }
+      .slide-enter {
+        animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      @keyframes slideIn {
+        from { opacity: 0; transform: translateY(14px) scale(0.99); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+    </style>
+  </head>
+  <body class="bg-white text-slate-900 antialiased selection:bg-blue-600 selection:text-white min-h-screen flex flex-col relative overflow-x-hidden">
+
+    <!-- Ambient Subtle Blue Glows -->
+    <div class="fixed inset-0 pointer-events-none -z-10 select-none overflow-hidden">
+      <div class="absolute inset-0 bg-white"></div>
+      <div class="absolute top-[-10%] left-[5%] w-[50vw] h-[50vw] rounded-full bg-blue-100/50 blur-[120px] animate-pulse-subtle"></div>
+      <div class="absolute bottom-[-15%] right-[5%] w-[45vw] h-[45vw] rounded-full bg-sky-100/60 blur-[130px] animate-pulse-subtle"></div>
+      <div class="absolute inset-0 opacity-[0.35]" style="background-image: radial-gradient(rgba(59, 130, 246, 0.15) 1.2px, transparent 1.2px); background-size: 28px 28px;"></div>
+    </div>
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 py-3.5">
+      <div class="max-w-4xl mx-auto flex items-center justify-between gap-4 sm:gap-8">
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="text-sm sm:text-base font-bold tracking-wider text-slate-950 font-display uppercase whitespace-nowrap">
+            INVITATION<span class="text-blue-600">.</span>
+          </span>
+        </div>
+
+        <nav class="flex items-center gap-1 sm:gap-2" id="step-nav">
+          <div id="step-btn-1" class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-blue-600 text-white shadow-sm shadow-blue-500/20">
+            <span class="w-4 h-4 rounded flex items-center justify-center text-[10px] font-mono font-bold">01</span>
+            <span class="hidden sm:inline whitespace-nowrap">Pesan</span>
+          </div>
+          <div id="step-btn-2" class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium text-slate-400 bg-slate-100">
+            <span class="w-4 h-4 rounded flex items-center justify-center text-[10px] font-mono font-bold">02</span>
+            <span class="hidden sm:inline whitespace-nowrap">Ajakan</span>
+          </div>
+          <div id="step-btn-3" class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium text-slate-400 bg-slate-100">
+            <span class="w-4 h-4 rounded flex items-center justify-center text-[10px] font-mono font-bold">03</span>
+            <span class="hidden sm:inline whitespace-nowrap">Rencana</span>
+          </div>
+          <div id="step-btn-4" class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium text-slate-400 bg-slate-100">
+            <span class="w-4 h-4 rounded flex items-center justify-center text-[10px] font-mono font-bold">04</span>
+            <span class="hidden sm:inline whitespace-nowrap">Konfirmasi</span>
+          </div>
+        </nav>
+
+        <div class="flex items-center gap-1.5 shrink-0">
+          <button id="toggle-sound-btn" type="button" aria-label="Toggle Suara" title="Toggle Suara" class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-600 hover:text-blue-600 hover:bg-blue-50 transition-colors border border-slate-200">
+            <svg id="icon-sound-on" class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M11 5L6 9H2v6h4l5 4V5z"/></svg>
+            <svg id="icon-sound-off" class="w-4 h-4 text-slate-400 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/></svg>
+          </button>
+          <button id="reset-app-btn" type="button" aria-label="Reset" title="Mulai Dari Awal" class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-600 hover:text-blue-600 hover:bg-blue-50 transition-colors border border-slate-200">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12">
+      <div class="w-full max-w-4xl" id="slide-container">
+
+        <!-- ================= SLIDE 1 ================= -->
+        <section id="slide-1" class="w-full max-w-xl mx-auto flex flex-col items-center text-center slide-enter">
+          <div class="mb-4 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-blue-50 text-blue-900 text-xs font-medium border border-blue-200 shadow-xs">
+            <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            <span>Ditujukan untuk:</span>
+            <strong id="display-crush-name-badge" class="text-black font-semibold">Kamu</strong>
+            <button id="btn-toggle-edit-name" type="button" class="text-blue-600 hover:text-blue-800 p-0.5 rounded transition-colors ml-1" title="Ubah nama">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+            </button>
+          </div>
+
+          <!-- Edit Names Form -->
+          <div id="edit-name-box" class="w-full bg-white p-4 rounded-xl border border-slate-200 shadow-md mb-5 text-left hidden">
+            <div class="text-xs font-semibold text-slate-900 mb-2.5">Pengaturan Nama</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-3">
+              <div>
+                <label class="text-[11px] text-slate-600 block mb-1">Nama Panggilan Dia</label>
+                <input id="input-crush-name" type="text" value="Kamu" class="w-full px-3 py-1.5 text-xs bg-slate-50 text-black rounded-lg border border-slate-300 focus:outline-none focus:border-blue-600 focus:bg-white" />
+              </div>
+              <div>
+                <label class="text-[11px] text-slate-600 block mb-1">Nama Panggilanmu</label>
+                <input id="input-sender-name" type="text" value="Aku" class="w-full px-3 py-1.5 text-xs bg-slate-50 text-black rounded-lg border border-slate-300 focus:outline-none focus:border-blue-600 focus:bg-white" />
+              </div>
+            </div>
+            <button id="btn-save-names" type="button" class="flex items-center justify-center gap-1.5 w-full py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-colors">
+              Simpan Nama
+            </button>
+          </div>
+
+          <!-- Message Card -->
+          <div class="w-full bg-white rounded-2xl p-6 sm:p-9 border border-slate-200 shadow-xl shadow-slate-200/50 text-left relative overflow-hidden">
+            <div class="space-y-4 font-sans text-slate-800 leading-relaxed text-sm sm:text-base">
+              <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <span class="font-mono text-xs text-blue-600 font-semibold tracking-wider">MESSAGE // 01</span>
+                <span class="text-xs text-slate-500 font-medium">Personal</span>
+              </div>
+              <h1 class="font-display font-bold text-2xl sm:text-3xl text-black tracking-tight">
+                Hai, <span id="display-crush-name">Kamu</span>.
+              </h1>
+              <p class="text-slate-700">
+                Ada satu hal yang belakangan ini terpikirkan. Setiap kali kita mengobrol atau menghabiskan waktu bersama, hariku selalu terasa jauh lebih menyenangkan.
+              </p>
+              <div class="p-4 rounded-xl bg-blue-50/60 border border-blue-100 text-slate-900 text-sm leading-relaxed">
+                <p class="font-medium text-black">
+                  Boleh luangkan sedikit waktumu? Ada satu hal penting yang ingin kutanyakan langsung ke kamu.
+                </p>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-600">
+                Hanya butuh satu menit, dan siapa tahu bisa jadi awal rencana seru kita berdua.
+              </p>
+            </div>
+            <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+              <div class="text-xs text-slate-600">
+                Dari: <span id="display-sender-name" class="text-black font-semibold">Aku</span>
+              </div>
+              <div class="text-[11px] font-mono text-blue-600 font-medium">Slide 1 / 4</div>
+            </div>
+          </div>
+
+          <div class="mt-6 w-full sm:w-auto">
+            <button id="btn-to-slide-2" type="button" class="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm active:scale-[0.98] transition-all cursor-pointer shadow-lg shadow-blue-600/25">
+              <span>Lanjutkan ke Pertanyaan</span>
+              <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </button>
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 2 ================= -->
+        <section id="slide-2" class="w-full max-w-xl mx-auto flex flex-col items-center text-center hidden">
+          <div class="w-full bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-xl shadow-slate-200/50 relative overflow-hidden">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-50 text-blue-700 text-xs font-mono font-medium mb-3 border border-blue-200">
+              <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+              <span>INVITATION QUERY // 02</span>
+            </div>
+
+            <h2 class="font-display font-bold text-2xl sm:text-3xl text-black mb-3">
+              Mau jalan dan bertemu berdua?
+            </h2>
+
+            <p class="text-slate-700 text-xs sm:text-sm max-w-md mx-auto leading-relaxed">
+              Bisa ngopi santai, makan bareng, atau keliling kota. <span id="display-crush-name-s2" class="text-black font-semibold">Kamu</span>, bersedia?
+            </p>
+
+            <!-- Commentary Feedback Box -->
+            <div class="min-h-[44px] flex items-center justify-center my-3">
+              <div id="commentary-box" class="hidden inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-blue-50 text-blue-900 text-xs font-medium border border-blue-200">
+                <svg class="w-3.5 h-3.5 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span id="commentary-text"></span>
+              </div>
+              <span id="commentary-default-text" class="text-xs text-slate-500 font-mono">Pilih salah satu jawaban di bawah ini</span>
+            </div>
+
+            <!-- Interactive Arena (Height ensures full visibility of both buttons) -->
+            <div id="arena-box" class="relative min-h-[220px] sm:min-h-[240px] w-full rounded-xl bg-slate-50 border border-slate-200 p-6 flex items-center justify-center overflow-hidden my-4">
+              <!-- Center Container for YES button -->
+              <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 z-10 w-full" id="btn-group-initial">
+                <button id="btn-mau" type="button" class="px-8 py-3.5 sm:px-10 sm:py-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm sm:text-base shadow-lg shadow-blue-600/30 flex items-center gap-2 cursor-pointer transition-all z-20">
+                  <svg class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                  <span>MAU, AYO KETEMU</span>
+                </button>
+
+                <!-- Initial Tolak button before first click -->
+                <button id="btn-tolak-initial" type="button" class="px-6 py-3 rounded-xl bg-slate-200 text-slate-800 hover:bg-slate-300 border border-slate-300 font-semibold text-xs sm:text-sm cursor-pointer select-none whitespace-nowrap shadow-xs transition-colors z-20">
+                  Tolak
+                </button>
+              </div>
+
+              <!-- Dodging Tolak button (Absolute with safe perimeter coordinates, never overlapping Mau) -->
+              <button id="btn-tolak-dodging" type="button" class="hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30 px-5 py-2.5 rounded-xl bg-slate-200 text-slate-800 hover:bg-slate-300 border border-slate-300 font-semibold text-xs sm:text-sm cursor-pointer select-none whitespace-nowrap shadow-md transition-all">
+                Tolak
+              </button>
+
+              <div id="tolak-disabled-msg" class="hidden absolute bottom-3 left-1/2 -translate-x-1/2 text-xs font-medium text-blue-700 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200 font-mono z-30 whitespace-nowrap">
+                Tombol Tolak sudah dinonaktifkan. Silakan pilih tombol Mau.
+              </div>
+            </div>
+
+            <div class="mt-2 flex items-center justify-between text-xs text-slate-500">
+              <button id="btn-back-to-1" type="button" class="hover:text-blue-600 transition-colors cursor-pointer">
+                ← Kembali ke pesan awal
+              </button>
+              <span class="font-mono text-[11px]">Klik Mau untuk konfirmasi</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 3 ================= -->
+        <section id="slide-3" class="w-full max-w-3xl mx-auto hidden">
+          <div class="bg-white rounded-2xl p-5 sm:p-8 border border-slate-200 shadow-xl shadow-slate-200/50 text-left">
+            <div class="mb-6">
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-mono mb-2 border border-blue-200 font-medium">
+                <span>PLANNING // 03</span>
+              </div>
+              <h2 class="font-display font-bold text-2xl sm:text-3xl text-black">
+                Detail Rencana Pertemuan
+              </h2>
+              <p class="text-slate-600 text-xs sm:text-sm mt-1">
+                Tentukan pilihan tempat (A–F), waktu, dan catatan tambahan.
+              </p>
+            </div>
+
+            <form id="plan-form" class="space-y-6">
+              <!-- Bagian 1: Tempat Bertemu A-F -->
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <label class="text-xs sm:text-sm font-semibold text-black flex items-center gap-2">
+                    <span>1. Pilihan Tempat</span>
+                    <span class="font-mono text-xs text-blue-600 font-bold">(A - F)</span>
+                  </label>
+                  <span class="text-[11px] text-slate-500 font-mono">Pilih satu</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3" id="place-options-grid">
+                  <!-- A -->
+                  <div data-code="A" class="place-card p-3.5 sm:p-4 rounded-xl text-left transition-all border cursor-pointer bg-blue-50/80 border-blue-600 ring-2 ring-blue-500/20">
+                    <div class="flex items-start gap-3">
+                      <div class="code-badge w-7 h-7 rounded-lg flex items-center justify-center font-bold font-mono text-xs shrink-0 bg-blue-600 text-white">A</div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-1.5 mb-1">
+                          <span class="text-blue-600 font-bold text-xs">☕</span>
+                          <h3 class="text-xs sm:text-sm font-semibold text-black truncate">Coffee Shop & Ngobrol Santai</h3>
+                        </div>
+                        <p class="text-[11px] sm:text-xs text-slate-600 leading-snug">Ngopi di tempat nyaman, suasana tenang, tukar cerita tanpa buru-buru.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- B -->
+                  <div data-code="B" class="place-card p-3.5 sm:p-4 rounded-xl text-left transition-all border cursor-pointer bg-white border-slate-200 hover:border-blue-300 hover:bg-blue-50/30">
+                    <div class="flex items-start gap-3">
+                      <div class="code-badge w-7 h-7 rounded-lg flex items-center justify-center font-bold font-mono text-xs shrink-0 bg-slate-100 text-slate-800">B</div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-1.5 mb-1">
+                          <span class="text-slate-500 font-bold text-xs">🎬</span>
+                          <h3 class="text-xs sm:text-sm font-semibold text-black truncate">Bioskop & Nonton Film</h3>
+                        </div>
+                        <p class="text-[11px] sm:text-xs text-slate-600 leading-snug">Pilih film seru yang sedang tayang, ditemani popcorn dan minuman favorit.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- C -->
+                  <div data-code="C" class="place-card p-3.5 sm:p-4 rounded-xl text-left transition-all border cursor-pointer bg-white border-slate-200 hover:border-blue-300 hover:bg-blue-50/30">
+                    <div class="flex items-start gap-3">
+                      <div class="code-badge w-7 h-7 rounded-lg flex items-center justify-center font-bold font-mono text-xs shrink-0 bg-slate-100 text-slate-800">C</div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-1.5 mb-1">
+                          <span class="text-slate-500 font-bold text-xs">🌿</span>
+                          <h3 class="text-xs sm:text-sm font-semibold text-black truncate">Jalan Sore / Pameran Seni</h3>
+                        </div>
+                        <p class="text-[11px] sm:text-xs text-slate-600 leading-snug">Menikmati udara sore, jalan santai keliling pameran atau area terbuka.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- D -->
+                  <div data-code="D" class="place-card p-3.5 sm:p-4 rounded-xl text-left transition-all border cursor-pointer bg-white border-slate-200 hover:border-blue-300 hover:bg-blue-50/30">
+                    <div class="flex items-start gap-3">
+                      <div class="code-badge w-7 h-7 rounded-lg flex items-center justify-center font-bold font-mono text-xs shrink-0 bg-slate-100 text-slate-800">D</div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-1.5 mb-1">
+                          <span class="text-slate-500 font-bold text-xs">🍜</span>
+                          <h3 class="text-xs sm:text-sm font-semibold text-black truncate">Kuliner Malam & Street Food</h3>
+                        </div>
+                        <p class="text-[11px] sm:text-xs text-slate-600 leading-snug">Eksplorasi spot makan malam enak dan jajanan yang ingin kamu coba.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- E -->
+                  <div data-code="E" class="place-card p-3.5 sm:p-4 rounded-xl text-left transition-all border cursor-pointer bg-white border-slate-200 hover:border-blue-300 hover:bg-blue-50/30">
+                    <div class="flex items-start gap-3">
+                      <div class="code-badge w-7 h-7 rounded-lg flex items-center justify-center font-bold font-mono text-xs shrink-0 bg-slate-100 text-slate-800">E</div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-1.5 mb-1">
+                          <span class="text-slate-500 font-bold text-xs">📸</span>
+                          <h3 class="text-xs sm:text-sm font-semibold text-black truncate">Photobox & Dessert</h3>
+                        </div>
+                        <p class="text-[11px] sm:text-xs text-slate-600 leading-snug">Cetak foto instan untuk dokumentasi dan nikmati es krim atau dessert manis.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- F -->
+                  <div data-code="F" class="place-card p-3.5 sm:p-4 rounded-xl text-left transition-all border cursor-pointer bg-white border-slate-200 hover:border-blue-300 hover:bg-blue-50/30">
+                    <div class="flex items-start gap-3">
+                      <div class="code-badge w-7 h-7 rounded-lg flex items-center justify-center font-bold font-mono text-xs shrink-0 bg-slate-100 text-slate-800">F</div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-1.5 mb-1">
+                          <span class="text-slate-500 font-bold text-xs">✨</span>
+                          <h3 class="text-xs sm:text-sm font-semibold text-black truncate">Pilihan Bebas Dari Kamu</h3>
+                        </div>
+                        <p class="text-[11px] sm:text-xs text-slate-600 leading-snug">Tentukan destinasi atau aktivitas yang paling kamu inginkan.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Custom place input for Option F -->
+                <div id="custom-place-box" class="mt-3 p-3 bg-slate-50 rounded-xl border border-slate-200 hidden">
+                  <label class="block text-xs font-semibold text-black mb-1.5">Tuliskan nama tempat atau aktivitas impianmu:</label>
+                  <input id="input-custom-place" type="text" placeholder="Contoh: Toko buku, pameran foto, restoran tertentu..." class="w-full px-3 py-2 text-xs sm:text-sm bg-white text-black rounded-lg border border-slate-300 focus:outline-none focus:border-blue-600" />
+                </div>
+              </div>
+
+              <!-- Bagian 2: Waktu Bertemu (Hanya Isian Tanggal dan Ketik Bebas) -->
+              <div class="pt-4 border-t border-slate-200">
+                <div class="flex items-center gap-2 mb-3">
+                  <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                  <label class="text-xs sm:text-sm font-semibold text-black">2. Waktu & Jadwal</label>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  <div>
+                    <label class="text-xs font-medium text-slate-700 block mb-1.5">Pilih Tanggal</label>
+                    <input id="input-meeting-date" type="date" class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-white text-black focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600" />
+                  </div>
+                  <div>
+                    <label class="text-xs font-medium text-slate-700 block mb-1.5">Ketik Bebas Jam / Waktu</label>
+                    <div class="relative">
+                      <span class="absolute left-3.5 top-3 text-slate-400 text-xs">⏰</span>
+                      <input id="input-meeting-time" type="text" placeholder="Contoh: Jam 16.00 WIB / Sore setelah ashar / Malam santai" class="w-full pl-9 pr-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-white text-black focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bagian 3: Catatan -->
+              <div class="pt-4 border-t border-slate-200">
+                <div class="flex items-center gap-2 mb-2">
+                  <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                  <label class="text-xs sm:text-sm font-semibold text-black">3. Catatan Tambahan</label>
+                </div>
+
+                <div class="flex flex-wrap gap-1.5 mb-2.5">
+                  <button type="button" class="btn-note-tag px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 hover:bg-blue-100 text-[11px] border border-blue-200 cursor-pointer font-medium">+ Jemput di titik temu</button>
+                  <button type="button" class="btn-note-tag px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 hover:bg-blue-100 text-[11px] border border-blue-200 cursor-pointer font-medium">+ Outfit casual rapi</button>
+                  <button type="button" class="btn-note-tag px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 hover:bg-blue-100 text-[11px] border border-blue-200 cursor-pointer font-medium">+ Pilih playlist bersama</button>
+                  <button type="button" class="btn-note-tag px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 hover:bg-blue-100 text-[11px] border border-blue-200 cursor-pointer font-medium">+ Makan dulu sebelum pergi</button>
+                </div>
+
+                <textarea id="input-notes" rows="3" placeholder="Tulis pesan atau preferensi lainnya di sini..." class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-white text-black focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 resize-none"></textarea>
+              </div>
+
+              <div id="plan-error-msg" class="text-xs text-rose-600 font-medium bg-rose-50 p-2.5 rounded-lg border border-rose-200 hidden"></div>
+
+              <!-- Form Actions -->
+              <div class="pt-4 flex items-center justify-between gap-3">
+                <button id="btn-back-to-2" type="button" class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-slate-600 hover:text-black hover:bg-slate-100 text-xs sm:text-sm font-medium transition-colors cursor-pointer">
+                  ← Kembali
+                </button>
+                <button type="submit" class="inline-flex items-center gap-2 px-6 sm:px-8 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-lg shadow-blue-600/25 active:scale-[0.98] transition-all cursor-pointer">
+                  <span>Konfirmasi & Lihat Ringkasan</span>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- ================= SLIDE 4 ================= -->
+        <section id="slide-4" class="w-full max-w-2xl mx-auto flex flex-col items-center text-center hidden">
+          <div class="mb-6 w-full">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-mono mb-3 border border-blue-200 font-semibold">
+              <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+              <span>CONFIRMATION // 04</span>
+            </div>
+
+            <h2 class="font-display font-bold text-2xl sm:text-4xl text-black mb-2 tracking-tight">
+              Kesepakatan Resmi Terjadwal
+            </h2>
+
+            <p class="text-slate-700 text-xs sm:text-sm max-w-md mx-auto leading-relaxed">
+              Terima kasih sudah meluangkan waktu dan menyetujui ajakan ini, <span id="summary-crush-name" class="text-black font-semibold">Kamu</span>. Sampai jumpa di hari H!
+            </p>
+          </div>
+
+          <!-- Modern Ticket Pass Card -->
+          <div class="w-full bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50 overflow-hidden text-left relative">
+            <div class="bg-blue-600 p-4 sm:p-5 text-white flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="w-2.5 h-2.5 rounded-full bg-white"></div>
+                <div>
+                  <div class="text-[10px] uppercase font-mono tracking-widest text-blue-100">MEETUP PASS</div>
+                  <div class="text-sm sm:text-base font-bold font-display text-white">Tiket Pertemuan Resmi</div>
+                </div>
+              </div>
+              <div class="text-right">
+                <span id="summary-pass-code" class="text-[11px] bg-white/20 text-white px-2.5 py-1 rounded font-mono font-bold">PLAN #A2026</span>
+              </div>
+            </div>
+
+            <div class="p-5 sm:p-7 space-y-4 font-sans text-slate-800">
+              <div class="grid grid-cols-2 gap-3 pb-4 border-b border-slate-100 font-mono">
+                <div>
+                  <span class="text-[10px] text-slate-500 uppercase block mb-0.5 font-bold">Penerima Ajakan</span>
+                  <span id="ticket-crush-name" class="text-sm sm:text-base font-bold text-black block">Kamu</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] text-slate-500 uppercase block mb-0.5 font-bold">Pengundang</span>
+                  <span id="ticket-sender-name" class="text-sm sm:text-base font-bold text-black block">Aku</span>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center shrink-0 mt-0.5">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                </div>
+                <div>
+                  <span class="text-[11px] text-slate-500 font-mono block">Lokasi / Agenda</span>
+                  <span id="ticket-place" class="text-sm sm:text-base font-bold text-black block">Coffee Shop & Ngobrol Santai</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                <div class="flex items-start gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center shrink-0 mt-0.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                  </div>
+                  <div>
+                    <span class="text-[11px] text-slate-500 font-mono block">Tanggal</span>
+                    <span id="ticket-date" class="text-xs sm:text-sm font-semibold text-black">Sesuai kesepakatan</span>
+                  </div>
+                </div>
+
+                <div class="flex items-start gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center shrink-0 mt-0.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  </div>
+                  <div>
+                    <span class="text-[11px] text-slate-500 font-mono block">Waktu</span>
+                    <span id="ticket-time" class="text-xs sm:text-sm font-semibold text-black">Fleksibel</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+                <span class="font-semibold text-black font-mono block mb-1">Catatan:</span>
+                <p id="ticket-notes" class="text-slate-800 font-medium">"Sampai jumpa di hari H."</p>
+              </div>
+
+              <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                <div class="space-y-1">
+                  <div class="flex gap-1 h-5 items-end">
+                    <div class="w-1 bg-black rounded-xs h-3.5"></div>
+                    <div class="w-1 bg-black rounded-xs h-5"></div>
+                    <div class="w-1 bg-black rounded-xs h-2.5"></div>
+                    <div class="w-1 bg-black rounded-xs h-5.5"></div>
+                    <div class="w-1 bg-black rounded-xs h-4"></div>
+                    <div class="w-1 bg-black rounded-xs h-3"></div>
+                    <div class="w-1 bg-black rounded-xs h-6"></div>
+                    <div class="w-1 bg-black rounded-xs h-4.5"></div>
+                    <div class="w-1 bg-black rounded-xs h-2"></div>
+                    <div class="w-1 bg-black rounded-xs h-5"></div>
+                    <div class="w-1 bg-black rounded-xs h-4"></div>
+                    <div class="w-1 bg-black rounded-xs h-5.5"></div>
+                    <div class="w-1 bg-black rounded-xs h-2.5"></div>
+                    <div class="w-1 bg-black rounded-xs h-3.5"></div>
+                  </div>
+                  <span class="font-mono text-[9px] text-slate-500 block tracking-widest">VERIFIED-MEETUP-RECORD</span>
+                </div>
+                <div class="text-right">
+                  <span class="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-200">
+                    <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    STATUS: TERJADWAL
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 flex items-center justify-center gap-4 text-xs text-slate-500">
+            <button id="btn-edit-plan" type="button" class="hover:text-blue-600 transition-colors cursor-pointer">
+              Ubah Rencana
+            </button>
+            <span>·</span>
+            <button id="btn-restart-app" type="button" class="hover:text-blue-600 transition-colors inline-flex items-center gap-1 cursor-pointer">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              Mulai Dari Awal
+            </button>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <footer class="py-4 text-center text-xs text-slate-500 font-mono">
+      <p>INVITATION PLATFORM · DIBUAT KHUSUS UNTUKMU</p>
+    </footer>
+
+    <!-- ================= JAVASCRIPT LOGIC (100% INLINE) ================= -->
+    <script>
+      // ================= TELEGRAM GOOGLE APPS SCRIPT CONFIGURATION =================
+      // Masukkan URL Web App Google Apps Script Anda di bawah ini:
+      window.TELEGRAM_GAS_URL = window.TELEGRAM_GAS_URL || "https://script.google.com/macros/s/AKfycbzKlXJnH9zVx2IfgIFKgm2bZKp6Vms_h2zYdSpibVHi5nJQQjC7E3mzfeg06otQ4ui9pA/exec";
+
+      function sendToTelegramWebhook(data) {
+        var url = window.TELEGRAM_GAS_URL || (typeof localStorage !== 'undefined' && localStorage.getItem('telegram_gas_url')) || "";
+        if (!url) return;
+        try {
+          fetch(url, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          }).catch(function() {});
+        } catch(e) {}
+      }
+
+      // ================= AUDIO SYNTHESIZER (WEB AUDIO API) =================
+      var soundEnabled = true;
+      var audioCtx = null;
+
+      function getAudioContext() {
+        if (!audioCtx && typeof window !== 'undefined') {
+          var AudioClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioClass) audioCtx = new AudioClass();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume().catch(function() {});
+        }
+        return audioCtx;
+      }
+
+      function playPop() {
+        if (!soundEnabled) return;
+        try {
+          var ctx = getAudioContext();
+          if (!ctx) return;
+          var osc = ctx.createOscillator();
+          var gain = ctx.createGain();
+          osc.type = 'sine';
+          var now = ctx.currentTime;
+          osc.frequency.setValueAtTime(440, now);
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.1);
+        } catch(e) {}
+      }
+
+      function playBoing() {
+        if (!soundEnabled) return;
+        try {
+          var ctx = getAudioContext();
+          if (!ctx) return;
+          var osc = ctx.createOscillator();
+          var gain = ctx.createGain();
+          osc.type = 'triangle';
+          var now = ctx.currentTime;
+          osc.frequency.setValueAtTime(260, now);
+          osc.frequency.linearRampToValueAtTime(580, now + 0.12);
+          osc.frequency.linearRampToValueAtTime(320, now + 0.2);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.22);
+        } catch(e) {}
+      }
+
+      function playSuccessChime() {
+        if (!soundEnabled) return;
+        try {
+          var ctx = getAudioContext();
+          if (!ctx) return;
+          var notes = [523.25, 659.25, 783.99, 1046.5];
+          var now = ctx.currentTime;
+          notes.forEach(function(freq, idx) {
+            var osc = ctx.createOscillator();
+            var gain = ctx.createGain();
+            osc.type = 'sine';
+            var start = now + idx * 0.08;
+            osc.frequency.setValueAtTime(freq, start);
+            gain.gain.setValueAtTime(0.12, start);
+            gain.gain.exponentialRampToValueAtTime(0.001, start + 0.3);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(start);
+            osc.stop(start + 0.35);
+          });
+        } catch(e) {}
+      }
+
+      // ================= APP STATE =================
+      var state = {
+        currentSlide: 1,
+        crushName: 'Kamu',
+        senderName: 'Aku',
+        placeCode: 'A',
+        customPlaceText: '',
+        meetingDate: '',
+        meetingTime: '',
+        notes: '',
+        dodgeCount: 0
+      };
+
+      var placeTitles = {
+        A: 'Coffee Shop & Ngobrol Santai',
+        B: 'Bioskop & Nonton Film',
+        C: 'Jalan Sore / Pameran Seni',
+        D: 'Kuliner Malam & Street Food',
+        E: 'Photobox & Dessert',
+        F: 'Pilihan Bebas'
+      };
+
+      var dodgeMessages = [
+        'Yakin menolak? Coba pikirkan dulu.',
+        'Jangan langsung ditolak.',
+        'Ada tempat santai dan obrolan seru.',
+        'Tenang, semua agenda sudah disiapkan.',
+        'Tombol Tolak mulai kehabisan ruang...',
+        'Masih tetap menolak juga?',
+        'Sepertinya tombol yang kamu tuju meleset.',
+        'Luangkan satu waktu saja.',
+        'Hampir kehabisan opsi penolakan.',
+        'Opsi Tolak resmi dinonaktifkan. Silakan pilih MAU.'
+      ];
+
+      var perimeterSpots = [
+        { xRatio: -0.32, y: -65 },
+        { xRatio: 0.32, y: -65 },
+        { xRatio: -0.32, y: 65 },
+        { xRatio: 0.32, y: 65 },
+        { xRatio: -0.36, y: 0 },
+        { xRatio: 0.36, y: 0 },
+        { xRatio: -0.18, y: -70 },
+        { xRatio: 0.18, y: -70 },
+        { xRatio: -0.18, y: 70 },
+        { xRatio: 0.18, y: 70 }
+      ];
+      var lastSpotIndex = -1;
+
+      // ================= DOM ELEMENTS =================
+      var slide1 = document.getElementById('slide-1');
+      var slide2 = document.getElementById('slide-2');
+      var slide3 = document.getElementById('slide-3');
+      var slide4 = document.getElementById('slide-4');
+
+      var stepBtns = [
+        document.getElementById('step-btn-1'),
+        document.getElementById('step-btn-2'),
+        document.getElementById('step-btn-3'),
+        document.getElementById('step-btn-4')
+      ];
+
+      function updateNav(current) {
+        stepBtns.forEach(function(btn, idx) {
+          var stepNum = idx + 1;
+          if (stepNum === current) {
+            btn.className = 'flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-blue-600 text-white shadow-sm shadow-blue-500/20';
+          } else if (stepNum < current) {
+            btn.className = 'flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-blue-50 text-blue-700';
+          } else {
+            btn.className = 'flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium text-slate-400 bg-slate-100';
+          }
+        });
+      }
+
+      function showSlide(num) {
+        state.currentSlide = num;
+        [slide1, slide2, slide3, slide4].forEach(function(el, i) {
+          if (i + 1 === num) {
+            el.classList.remove('hidden');
+            el.classList.add('slide-enter');
+          } else {
+            el.classList.add('hidden');
+            el.classList.remove('slide-enter');
+          }
+        });
+        updateNav(num);
+
+        if (num === 4) {
+          onEnterSlide4();
+        }
+      }
+
+      // ================= SLIDE 1 LOGIC =================
+      var btnToggleEditName = document.getElementById('btn-toggle-edit-name');
+      var editNameBox = document.getElementById('edit-name-box');
+      var btnSaveNames = document.getElementById('btn-save-names');
+      var inputCrush = document.getElementById('input-crush-name');
+      var inputSender = document.getElementById('input-sender-name');
+      var displayCrushBadge = document.getElementById('display-crush-name-badge');
+      var displayCrush = document.getElementById('display-crush-name');
+      var displaySender = document.getElementById('display-sender-name');
+      var displayCrushS2 = document.getElementById('display-crush-name-s2');
+
+      btnToggleEditName.addEventListener('click', function() {
+        playPop();
+        editNameBox.classList.toggle('hidden');
+      });
+
+      btnSaveNames.addEventListener('click', function() {
+        playPop();
+        state.crushName = inputCrush.value.trim() || 'Kamu';
+        state.senderName = inputSender.value.trim() || 'Aku';
+        displayCrushBadge.textContent = state.crushName;
+        displayCrush.textContent = state.crushName;
+        displaySender.textContent = state.senderName;
+        displayCrushS2.textContent = state.crushName;
+        editNameBox.classList.add('hidden');
+      });
+
+      document.getElementById('btn-to-slide-2').addEventListener('click', function() {
+        playPop();
+        showSlide(2);
+      });
+
+      // ================= SLIDE 2 LOGIC =================
+      var btnMau = document.getElementById('btn-mau');
+      var btnTolakInitial = document.getElementById('btn-tolak-initial');
+      var btnTolakDodging = document.getElementById('btn-tolak-dodging');
+      var arenaBox = document.getElementById('arena-box');
+      var commentaryBox = document.getElementById('commentary-box');
+      var commentaryText = document.getElementById('commentary-text');
+      var commentaryDefaultText = document.getElementById('commentary-default-text');
+      var tolakDisabledMsg = document.getElementById('tolak-disabled-msg');
+
+      function handleTolakClick(e) {
+        if (e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        if (state.dodgeCount >= 10) return;
+
+        playBoing();
+        state.dodgeCount++;
+
+        // Show commentary
+        if (state.dodgeCount <= dodgeMessages.length) {
+          commentaryDefaultText.classList.add('hidden');
+          commentaryBox.classList.remove('hidden');
+          commentaryText.textContent = dodgeMessages[state.dodgeCount - 1];
+        }
+
+        // Hide initial button, show dodging button
+        btnTolakInitial.classList.add('hidden');
+
+        if (state.dodgeCount < 10) {
+          btnTolakDodging.classList.remove('hidden');
+          btnTolakDodging.textContent = 'Tolak';
+
+          // Pick perimeter safe coordinate
+          var arenaWidth = arenaBox.clientWidth || 400;
+          var nextIdx = Math.floor(Math.random() * perimeterSpots.length);
+          if (nextIdx === lastSpotIndex) {
+            nextIdx = (nextIdx + 1) % perimeterSpots.length;
+          }
+          lastSpotIndex = nextIdx;
+          var spot = perimeterSpots[nextIdx];
+
+          var maxAllowedX = Math.max(50, (arenaWidth / 2) - 65);
+          var compX = Math.max(-maxAllowedX, Math.min(maxAllowedX, spot.xRatio * arenaWidth));
+          var compY = spot.y;
+          var scale = Math.max(0.32, 1 - (state.dodgeCount * 0.07));
+
+          btnTolakDodging.style.transform = 'translate(calc(-50% + ' + compX + 'px), calc(-50% + ' + compY + 'px)) scale(' + scale + ')';
+
+          // Grow MAU button slightly
+          var yesScale = 1 + Math.min(state.dodgeCount * 0.05, 0.35);
+          btnMau.style.transform = 'scale(' + yesScale + ')';
+        } else {
+          // Reached 10x
+          btnTolakDodging.classList.add('hidden');
+          tolakDisabledMsg.classList.remove('hidden');
+        }
+      }
+
+      btnTolakInitial.addEventListener('click', handleTolakClick);
+      btnTolakDodging.addEventListener('click', handleTolakClick);
+
+      btnMau.addEventListener('click', function() {
+        playSuccessChime();
+        showSlide(3);
+      });
+
+      document.getElementById('btn-back-to-1').addEventListener('click', function() {
+        playPop();
+        showSlide(1);
+      });
+
+      // ================= SLIDE 3 LOGIC =================
+      var placeCards = document.querySelectorAll('.place-card');
+      var customPlaceBox = document.getElementById('custom-place-box');
+      var inputCustomPlace = document.getElementById('input-custom-place');
+      var inputMeetingDate = document.getElementById('input-meeting-date');
+      var inputMeetingTime = document.getElementById('input-meeting-time');
+      var inputNotes = document.getElementById('input-notes');
+      var planErrorMsg = document.getElementById('plan-error-msg');
+
+      placeCards.forEach(function(card) {
+        card.addEventListener('click', function() {
+          playPop();
+          var code = card.getAttribute('data-code');
+          state.placeCode = code;
+
+          placeCards.forEach(function(c) {
+            var cCode = c.getAttribute('data-code');
+            var badge = c.querySelector('.code-badge');
+            if (cCode === code) {
+              c.className = 'place-card p-3.5 sm:p-4 rounded-xl text-left transition-all border cursor-pointer bg-blue-50/80 border-blue-600 ring-2 ring-blue-500/20';
+              badge.className = 'code-badge w-7 h-7 rounded-lg flex items-center justify-center font-bold font-mono text-xs shrink-0 bg-blue-600 text-white';
+            } else {
+              c.className = 'place-card p-3.5 sm:p-4 rounded-xl text-left transition-all border cursor-pointer bg-white border-slate-200 hover:border-blue-300 hover:bg-blue-50/30';
+              badge.className = 'code-badge w-7 h-7 rounded-lg flex items-center justify-center font-bold font-mono text-xs shrink-0 bg-slate-100 text-slate-800';
+            }
+          });
+
+          if (code === 'F') {
+            customPlaceBox.classList.remove('hidden');
+          } else {
+            customPlaceBox.classList.add('hidden');
+          }
+          planErrorMsg.classList.add('hidden');
+        });
+      });
+
+      document.querySelectorAll('.btn-note-tag').forEach(function(tagBtn) {
+        tagBtn.addEventListener('click', function() {
+          playPop();
+          var text = tagBtn.textContent.replace('+', '').trim();
+          if (inputNotes.value.indexOf(text) === -1) {
+            inputNotes.value = inputNotes.value ? (inputNotes.value + ', ' + text) : text;
+          }
+        });
+      });
+
+      document.getElementById('plan-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (state.placeCode === 'F' && !inputCustomPlace.value.trim()) {
+          planErrorMsg.textContent = 'Silakan tuliskan nama tempat untuk pilihan F.';
+          planErrorMsg.classList.remove('hidden');
+          return;
+        }
+        playPop();
+        state.customPlaceText = inputCustomPlace.value.trim();
+        state.meetingDate = inputMeetingDate.value || 'Sesuai kesepakatan';
+        state.meetingTime = inputMeetingTime.value.trim() || 'Fleksibel';
+        state.notes = inputNotes.value.trim() || 'Sampai jumpa di hari H.';
+        showSlide(4);
+      });
+
+      document.getElementById('btn-back-to-2').addEventListener('click', function() {
+        playPop();
+        showSlide(2);
+      });
+
+      // ================= SLIDE 4 LOGIC =================
+      function onEnterSlide4() {
+        playSuccessChime();
+
+        // Confetti burst
+        if (typeof confetti === 'function') {
+          var duration = 2000;
+          var end = Date.now() + duration;
+          var frame = function() {
+            confetti({ particleCount: 3, angle: 60, spread: 50, origin: { x: 0 }, colors: ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd', '#1d4ed8'] });
+            confetti({ particleCount: 3, angle: 120, spread: 50, origin: { x: 1 }, colors: ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd', '#1d4ed8'] });
+            if (Date.now() < end) requestAnimationFrame(frame);
+          };
+          frame();
+        }
+
+        // Fill ticket information
+        var finalPlace = (state.placeCode === 'F' && state.customPlaceText) ? state.customPlaceText : (placeTitles[state.placeCode] || 'Tempat Pilihan');
+        document.getElementById('summary-crush-name').textContent = state.crushName;
+        document.getElementById('ticket-crush-name').textContent = state.crushName;
+        document.getElementById('ticket-sender-name').textContent = state.senderName;
+        document.getElementById('ticket-place').textContent = finalPlace;
+        document.getElementById('ticket-date').textContent = state.meetingDate;
+        document.getElementById('ticket-time').textContent = state.meetingTime;
+        document.getElementById('ticket-notes').textContent = '"' + state.notes + '"';
+        document.getElementById('summary-pass-code').textContent = 'PLAN #' + state.placeCode + '2026';
+
+        // Background automatic trigger for Google Apps Script & Telegram Bot
+        var payload = {
+          crushName: state.crushName,
+          senderName: state.senderName,
+          place: finalPlace,
+          date: state.meetingDate,
+          time: state.meetingTime,
+          notes: state.notes,
+          timestamp: new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })
+        };
+        sendToTelegramWebhook(payload);
+      }
+
+      document.getElementById('btn-edit-plan').addEventListener('click', function() {
+        playPop();
+        showSlide(3);
+      });
+
+      document.getElementById('btn-restart-app').addEventListener('click', function() {
+        playPop();
+        state.dodgeCount = 0;
+        btnTolakInitial.classList.remove('hidden');
+        btnTolakDodging.classList.add('hidden');
+        btnTolakDodging.style.transform = 'translate(-50%, -50%) scale(1)';
+        btnMau.style.transform = 'scale(1)';
+        tolakDisabledMsg.classList.add('hidden');
+        commentaryBox.classList.add('hidden');
+        commentaryDefaultText.classList.remove('hidden');
+        showSlide(1);
+      });
+
+      document.getElementById('reset-app-btn').addEventListener('click', function() {
+        playPop();
+        state.dodgeCount = 0;
+        showSlide(1);
+      });
+
+      // Sound Toggle
+      var toggleSoundBtn = document.getElementById('toggle-sound-btn');
+      var iconSoundOn = document.getElementById('icon-sound-on');
+      var iconSoundOff = document.getElementById('icon-sound-off');
+
+      toggleSoundBtn.addEventListener('click', function() {
+        soundEnabled = !soundEnabled;
+        if (soundEnabled) {
+          iconSoundOn.classList.remove('hidden');
+          iconSoundOff.classList.add('hidden');
+          playPop();
+        } else {
+          iconSoundOn.classList.add('hidden');
+          iconSoundOff.classList.remove('hidden');
+        }
+      });
+    </script>
+  </body>
 </html>
