@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Wise</title>
+    <title>Ajakan Bertemu</title>
     <meta name="description" content="Aplikasi interaktif ajakan bertemu minimalis dengan pemilihan tempat dan jadwal." />
     <meta property="og:title" content="Ajakan Bertemu" />
     <meta property="og:description" content="Aplikasi interaktif ajakan bertemu minimalis dengan pemilihan tempat dan jadwal." />
@@ -115,7 +115,7 @@
           <div class="mb-4 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-blue-50 text-blue-900 text-xs font-medium border border-blue-200 shadow-xs">
             <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
             <span>Ditujukan untuk:</span>
-            <strong id="display-crush-name-badge" class="text-black font-semibold">Kay</strong>
+            <strong id="display-crush-name-badge" class="text-black font-semibold">Kamu</strong>
             <button id="btn-toggle-edit-name" type="button" class="text-blue-600 hover:text-blue-800 p-0.5 rounded transition-colors ml-1" title="Ubah nama">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
             </button>
@@ -126,11 +126,11 @@
             <div class="text-xs font-semibold text-slate-900 mb-2.5">Pengaturan Nama</div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-3">
               <div>
-                <label class="text-[11px] text-slate-600 block mb-1">Nama Panggilan</label>
+                <label class="text-[11px] text-slate-600 block mb-1">Nama Panggilan Dia</label>
                 <input id="input-crush-name" type="text" value="Kamu" class="w-full px-3 py-1.5 text-xs bg-slate-50 text-black rounded-lg border border-slate-300 focus:outline-none focus:border-blue-600 focus:bg-white" />
               </div>
               <div>
-                <label class="text-[11px] text-slate-600 block mb-1">Nama Panggilan</label>
+                <label class="text-[11px] text-slate-600 block mb-1">Nama Panggilanmu</label>
                 <input id="input-sender-name" type="text" value="Aku" class="w-full px-3 py-1.5 text-xs bg-slate-50 text-black rounded-lg border border-slate-300 focus:outline-none focus:border-blue-600 focus:bg-white" />
               </div>
             </div>
@@ -144,25 +144,26 @@
             <div class="space-y-4 font-sans text-slate-800 leading-relaxed text-sm sm:text-base">
               <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <span class="font-mono text-xs text-blue-600 font-semibold tracking-wider">MESSAGE // 01</span>
-                <span class="text-xs text-slate-500 font-medium">XYZ</span>
+                <span class="text-xs text-slate-500 font-medium">Personal</span>
               </div>
               <h1 class="font-display font-bold text-2xl sm:text-3xl text-black tracking-tight">
-                Hei, <span id="display-crush-name">Yth</span>.
+                Hai, <span id="display-crush-name">Kamu</span>.
               </h1>
               <p class="text-slate-700">
-                Aku mau ngajak dirimu ngobrol doang seh, nggakda maskud apapa, mumpung masih ada kesempatan ae sebelum menghilang dari Surabaya. sekalian mau ngasih kado buat kenang-kenangan sikit...
-              </p> 
+                Ada satu hal yang belakangan ini terpikirkan. Setiap kali kita mengobrol atau menghabiskan waktu bersama, hariku selalu terasa jauh lebih menyenangkan.
+              </p>
+              <div class="p-4 rounded-xl bg-blue-50/60 border border-blue-100 text-slate-900 text-sm leading-relaxed">
                 <p class="font-medium text-black">
-                  Kamu kapan kosong?
+                  Boleh luangkan sedikit waktumu? Ada satu hal penting yang ingin kutanyakan langsung ke kamu.
                 </p>
               </div>
               <p class="text-xs sm:text-sm text-slate-600">
-                Minta ijin ke siapa ne?
+                Hanya butuh satu menit, dan siapa tahu bisa jadi awal rencana seru kita berdua.
               </p>
             </div>
             <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
               <div class="text-xs text-slate-600">
-                Dari: <span id="display-sender-name" class="text-black font-semibold">Al...........</span>
+                Dari: <span id="display-sender-name" class="text-black font-semibold">Aku</span>
               </div>
               <div class="text-[11px] font-mono text-blue-600 font-medium">Slide 1 / 4</div>
             </div>
@@ -170,7 +171,7 @@
 
           <div class="mt-6 w-full sm:w-auto">
             <button id="btn-to-slide-2" type="button" class="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm active:scale-[0.98] transition-all cursor-pointer shadow-lg shadow-blue-600/25">
-              <span>Lanjutkan ke Pilihan Selanjutnya</span>
+              <span>Lanjutkan ke Pertanyaan</span>
               <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </button>
           </div>
@@ -185,11 +186,11 @@
             </div>
 
             <h2 class="font-display font-bold text-2xl sm:text-3xl text-black mb-3">
-              Mau nggak? Ku traktir kok
+              Mau jalan dan bertemu berdua?
             </h2>
 
             <p class="text-slate-700 text-xs sm:text-sm max-w-md mx-auto leading-relaxed">
-              Ngikut Jadwalmu aja <span id="display-crush-name-s2" class="text-black font-semibold">Kak</span>, 
+              Bisa ngopi santai, makan bareng, atau keliling kota. <span id="display-crush-name-s2" class="text-black font-semibold">Kamu</span>, bersedia?
             </p>
 
             <!-- Commentary Feedback Box -->
@@ -207,22 +208,22 @@
               <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 z-10 w-full" id="btn-group-initial">
                 <button id="btn-mau" type="button" class="px-8 py-3.5 sm:px-10 sm:py-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm sm:text-base shadow-lg shadow-blue-600/30 flex items-center gap-2 cursor-pointer transition-all z-20">
                   <svg class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-                  <span>Iya</span>
+                  <span>MAU, AYO KETEMU</span>
                 </button>
 
                 <!-- Initial Tolak button before first click -->
                 <button id="btn-tolak-initial" type="button" class="px-6 py-3 rounded-xl bg-slate-200 text-slate-800 hover:bg-slate-300 border border-slate-300 font-semibold text-xs sm:text-sm cursor-pointer select-none whitespace-nowrap shadow-xs transition-colors z-20">
-                  Nggak
+                  Tolak
                 </button>
               </div>
 
               <!-- Dodging Tolak button (Absolute with safe perimeter coordinates, never overlapping Mau) -->
               <button id="btn-tolak-dodging" type="button" class="hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30 px-5 py-2.5 rounded-xl bg-slate-200 text-slate-800 hover:bg-slate-300 border border-slate-300 font-semibold text-xs sm:text-sm cursor-pointer select-none whitespace-nowrap shadow-md transition-all">
-                Nggak
+                Tolak
               </button>
 
               <div id="tolak-disabled-msg" class="hidden absolute bottom-3 left-1/2 -translate-x-1/2 text-xs font-medium text-blue-700 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200 font-mono z-30 whitespace-nowrap">
-                Tombol dinonaktifkan. Silakan pilih tombol Iya.
+                Tombol Tolak sudah dinonaktifkan. Silakan pilih tombol Mau.
               </div>
             </div>
 
@@ -230,7 +231,7 @@
               <button id="btn-back-to-1" type="button" class="hover:text-blue-600 transition-colors cursor-pointer">
                 ← Kembali ke pesan awal
               </button>
-              <span class="font-mono text-[11px]">Klik untuk konfirmasi</span>
+              <span class="font-mono text-[11px]">Klik Mau untuk konfirmasi</span>
             </div>
           </div>
         </section>
@@ -243,10 +244,10 @@
                 <span>PLANNING // 03</span>
               </div>
               <h2 class="font-display font-bold text-2xl sm:text-3xl text-black">
-                Kasih Detail
+                Detail Rencana Pertemuan
               </h2>
               <p class="text-slate-600 text-xs sm:text-sm mt-1">
-                Tentukan pilihan tempat (A–F), waktu, dan Catatan tambahan.
+                Tentukan pilihan tempat (A–F), waktu, dan catatan tambahan.
               </p>
             </div>
 
@@ -269,9 +270,9 @@
                       <div class="flex-1 min-w-0">
                         <div class="flex items-center gap-1.5 mb-1">
                           <span class="text-blue-600 font-bold text-xs">☕</span>
-                          <h3 class="text-xs sm:text-sm font-semibold text-black truncate">Coffee Shop</h3>
+                          <h3 class="text-xs sm:text-sm font-semibold text-black truncate">Coffee Shop & Ngobrol Santai</h3>
                         </div>
-                        <p class="text-[11px] sm:text-xs text-slate-600 leading-snug">Ngopi, Makan, Gitulah.</p>
+                        <p class="text-[11px] sm:text-xs text-slate-600 leading-snug">Ngopi di tempat nyaman, suasana tenang, tukar cerita tanpa buru-buru.</p>
                       </div>
                     </div>
                   </div>
@@ -283,9 +284,9 @@
                       <div class="flex-1 min-w-0">
                         <div class="flex items-center gap-1.5 mb-1">
                           <span class="text-slate-500 font-bold text-xs">🎬</span>
-                          <h3 class="text-xs sm:text-sm font-semibold text-black truncate">Bioskop / Nonton</h3>
+                          <h3 class="text-xs sm:text-sm font-semibold text-black truncate">Bioskop & Nonton Film</h3>
                         </div>
-                        <p class="text-[11px] sm:text-xs text-slate-600 leading-snug">Emang sekarang film e apa, </p>
+                        <p class="text-[11px] sm:text-xs text-slate-600 leading-snug">Pilih film seru yang sedang tayang, ditemani popcorn dan minuman favorit.</p>
                       </div>
                     </div>
                   </div>
@@ -297,9 +298,9 @@
                       <div class="flex-1 min-w-0">
                         <div class="flex items-center gap-1.5 mb-1">
                           <span class="text-slate-500 font-bold text-xs">🌿</span>
-                          <h3 class="text-xs sm:text-sm font-semibold text-black truncate">Jalanan Citi leghh</h3>
+                          <h3 class="text-xs sm:text-sm font-semibold text-black truncate">Jalan Sore / Pameran Seni</h3>
                         </div>
-                        <p class="text-[11px] sm:text-xs text-slate-600 leading-snug">Paling yo Tunjungan, endi neh coba</p>
+                        <p class="text-[11px] sm:text-xs text-slate-600 leading-snug">Menikmati udara sore, jalan santai keliling pameran atau area terbuka.</p>
                       </div>
                     </div>
                   </div>
@@ -311,9 +312,9 @@
                       <div class="flex-1 min-w-0">
                         <div class="flex items-center gap-1.5 mb-1">
                           <span class="text-slate-500 font-bold text-xs">🍜</span>
-                          <h3 class="text-xs sm:text-sm font-semibold text-black truncate">Kuliner</h3>
+                          <h3 class="text-xs sm:text-sm font-semibold text-black truncate">Kuliner Malam & Street Food</h3>
                         </div>
-                        <p class="text-[11px] sm:text-xs text-slate-600 leading-snug">Eksplorasi spot makan yang tak pernah dijamah itu</p>
+                        <p class="text-[11px] sm:text-xs text-slate-600 leading-snug">Eksplorasi spot makan malam enak dan jajanan yang ingin kamu coba.</p>
                       </div>
                     </div>
                   </div>
@@ -325,9 +326,9 @@
                       <div class="flex-1 min-w-0">
                         <div class="flex items-center gap-1.5 mb-1">
                           <span class="text-slate-500 font-bold text-xs">📸</span>
-                          <h3 class="text-xs sm:text-sm font-semibold text-black truncate">Bingung</h3>
+                          <h3 class="text-xs sm:text-sm font-semibold text-black truncate">Photobox & Dessert</h3>
                         </div>
-                        <p class="text-[11px] sm:text-xs text-slate-600 leading-snug">Aku ya bingung</p>
+                        <p class="text-[11px] sm:text-xs text-slate-600 leading-snug">Cetak foto instan untuk dokumentasi dan nikmati es krim atau dessert manis.</p>
                       </div>
                     </div>
                   </div>
@@ -339,9 +340,9 @@
                       <div class="flex-1 min-w-0">
                         <div class="flex items-center gap-1.5 mb-1">
                           <span class="text-slate-500 font-bold text-xs">✨</span>
-                          <h3 class="text-xs sm:text-sm font-semibold text-black truncate">Bebas aja ngikut, surprize me</h3>
+                          <h3 class="text-xs sm:text-sm font-semibold text-black truncate">Pilihan Bebas Dari Kamu</h3>
                         </div>
-                        <p class="text-[11px] sm:text-xs text-slate-600 leading-snug">Manut aja</p>
+                        <p class="text-[11px] sm:text-xs text-slate-600 leading-snug">Tentukan destinasi atau aktivitas yang paling kamu inginkan.</p>
                       </div>
                     </div>
                   </div>
@@ -384,10 +385,10 @@
                 </div>
 
                 <div class="flex flex-wrap gap-1.5 mb-2.5">
-                  <button type="button" class="btn-note-tag px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 hover:bg-blue-100 text-[11px] border border-blue-200 cursor-pointer font-medium">+ Jemput ya</button>
-                  <button type="button" class="btn-note-tag px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 hover:bg-blue-100 text-[11px] border border-blue-200 cursor-pointer font-medium">+ Opsional</button>
-                  <button type="button" class="btn-note-tag px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 hover:bg-blue-100 text-[11px] border border-blue-200 cursor-pointer font-medium">+ Jangan terlambat</button>
-                  <button type="button" class="btn-note-tag px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 hover:bg-blue-100 text-[11px] border border-blue-200 cursor-pointer font-medium">+ Ga aneh aneh</button>
+                  <button type="button" class="btn-note-tag px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 hover:bg-blue-100 text-[11px] border border-blue-200 cursor-pointer font-medium">+ Jemput di titik temu</button>
+                  <button type="button" class="btn-note-tag px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 hover:bg-blue-100 text-[11px] border border-blue-200 cursor-pointer font-medium">+ Outfit casual rapi</button>
+                  <button type="button" class="btn-note-tag px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 hover:bg-blue-100 text-[11px] border border-blue-200 cursor-pointer font-medium">+ Pilih playlist bersama</button>
+                  <button type="button" class="btn-note-tag px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 hover:bg-blue-100 text-[11px] border border-blue-200 cursor-pointer font-medium">+ Makan dulu sebelum pergi</button>
                 </div>
 
                 <textarea id="input-notes" rows="3" placeholder="Tulis pesan atau preferensi lainnya di sini..." class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-white text-black focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 resize-none"></textarea>
@@ -418,11 +419,11 @@
             </div>
 
             <h2 class="font-display font-bold text-2xl sm:text-4xl text-black mb-2 tracking-tight">
-              Terjadwal
+              Kesepakatan Resmi Terjadwal
             </h2>
 
             <p class="text-slate-700 text-xs sm:text-sm max-w-md mx-auto leading-relaxed">
-              Terima kasih yang banyak sudah meluangkan waktu, <span id="summary-crush-name" class="text-black font-semibold">Kamu</span>. Sampai jumpa di hari H
+              Terima kasih sudah meluangkan waktu dan menyetujui ajakan ini, <span id="summary-crush-name" class="text-black font-semibold">Kamu</span>. Sampai jumpa di hari H!
             </p>
           </div>
 
@@ -445,11 +446,11 @@
               <div class="grid grid-cols-2 gap-3 pb-4 border-b border-slate-100 font-mono">
                 <div>
                   <span class="text-[10px] text-slate-500 uppercase block mb-0.5 font-bold">Penerima Ajakan</span>
-                  <span id="ticket-crush-name" class="text-sm sm:text-base font-bold text-black block">Kay</span>
+                  <span id="ticket-crush-name" class="text-sm sm:text-base font-bold text-black block">Kamu</span>
                 </div>
                 <div class="text-right">
                   <span class="text-[10px] text-slate-500 uppercase block mb-0.5 font-bold">Pengundang</span>
-                  <span id="ticket-sender-name" class="text-sm sm:text-base font-bold text-black block">A</span>
+                  <span id="ticket-sender-name" class="text-sm sm:text-base font-bold text-black block">Aku</span>
                 </div>
               </div>
 
@@ -542,30 +543,20 @@
     <!-- ================= JAVASCRIPT LOGIC (100% INLINE) ================= -->
     <script>
       // ================= TELEGRAM GOOGLE APPS SCRIPT CONFIGURATION =================
-      // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT KAMU DI SINI (Pastikan berakhiran /exec):
-      window.TELEGRAM_GAS_URL = "https://script.google.com/macros/s/AKfycbzKlXJnH9zVx2IfgIFKgm2bZKp6Vms_h2zYdSpibVHi5nJQQjC7E3mzfeg06otQ4ui9pA/exec";
+      // Masukkan URL Web App Google Apps Script Anda di bawah ini:
+      window.TELEGRAM_GAS_URL = window.TELEGRAM_GAS_URL || "";
 
       function sendToTelegramWebhook(data) {
-        var url = window.TELEGRAM_GAS_URL || (typeof localStorage !== 'undefined' && localStorage.getItem('telegram_gas_url')) || "";
-        if (!url) {
-          console.warn("URL Google Apps Script belum diisi!");
-          return;
-        }
+        var url = window.TELEGRAM_GAS_URL || (typeof localStorage !== 'undefined' && localStorage.getItem('telegram_gas_url')) || "https://script.google.com/macros/s/AKfycbzKlXJnH9zVx2IfgIFKgm2bZKp6Vms_h2zYdSpibVHi5nJQQjC7E3mzfeg06otQ4ui9pA/exec";
+        if (!url) return;
         try {
-          // Menggunakan text/plain agar kompatibel penuh dengan mode no-cors di Apps Script
           fetch(url, {
             method: 'POST',
             mode: 'no-cors',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
-          }).then(function() {
-            console.log("Data berhasil dikirim ke Google Apps Script!");
-          }).catch(function(err) {
-            console.error("Gagal mengirim webhook:", err);
-          });
-        } catch(e) {
-          console.error("Error eksekusi fetch:", e);
-        }
+          }).catch(function() {});
+        } catch(e) {}
       }
 
       // ================= AUDIO SYNTHESIZER (WEB AUDIO API) =================
@@ -670,16 +661,16 @@
       };
 
       var dodgeMessages = [
-        'Coba pikirkan dulu.',
-        'Come on.',
-        'Ayolah',
-        'Ayolah',
-        'Ayolah',
-        'Ayolah',
-        'Ayolah',
-        'Ayolah',
-        'Ayolah',
-        'Opsi dinonaktifkan. Silakan pilih Iya.'
+        'Yakin menolak? Coba pikirkan dulu.',
+        'Jangan langsung ditolak.',
+        'Ada tempat santai dan obrolan seru.',
+        'Tenang, semua agenda sudah disiapkan.',
+        'Tombol Tolak mulai kehabisan ruang...',
+        'Masih tetap menolak juga?',
+        'Sepertinya tombol yang kamu tuju meleset.',
+        'Luangkan satu waktu saja.',
+        'Hampir kehabisan opsi penolakan.',
+        'Opsi Tolak resmi dinonaktifkan. Silakan pilih MAU.'
       ];
 
       var perimeterSpots = [
