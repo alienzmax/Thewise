@@ -543,20 +543,30 @@
     <!-- ================= JAVASCRIPT LOGIC (100% INLINE) ================= -->
     <script>
       // ================= TELEGRAM GOOGLE APPS SCRIPT CONFIGURATION =================
-      // Masukkan URL Web App Google Apps Script Anda di bawah ini:
-      window.TELEGRAM_GAS_URL = window.TELEGRAM_GAS_URL || "https://script.google.com/macros/s/AKfycbzKlXJnH9zVx2IfgIFKgm2bZKp6Vms_h2zYdSpibVHi5nJQQjC7E3mzfeg06otQ4ui9pA/exec";
+      // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT KAMU DI SINI (Pastikan berakhiran /exec):
+      window.TELEGRAM_GAS_URL = "https://script.google.com/macros/s/AKfycbzKlXJnH9zVx2IfgIFKgm2bZKp6Vms_h2zYdSpibVHi5nJQQjC7E3mzfeg06otQ4ui9pA/exec";
 
       function sendToTelegramWebhook(data) {
         var url = window.TELEGRAM_GAS_URL || (typeof localStorage !== 'undefined' && localStorage.getItem('telegram_gas_url')) || "";
-        if (!url) return;
+        if (!url) {
+          console.warn("URL Google Apps Script belum diisi!");
+          return;
+        }
         try {
+          // Menggunakan text/plain agar kompatibel penuh dengan mode no-cors di Apps Script
           fetch(url, {
             method: 'POST',
             mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify(data)
-          }).catch(function() {});
-        } catch(e) {}
+          }).then(function() {
+            console.log("Data berhasil dikirim ke Google Apps Script!");
+          }).catch(function(err) {
+            console.error("Gagal mengirim webhook:", err);
+          });
+        } catch(e) {
+          console.error("Error eksekusi fetch:", e);
+        }
       }
 
       // ================= AUDIO SYNTHESIZER (WEB AUDIO API) =================
